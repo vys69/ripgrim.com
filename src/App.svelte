@@ -3,6 +3,7 @@
 	import XPTaskbar from "./XPTaskbar.svelte";
 	import { fade } from "svelte/transition";
 	import { writable } from "svelte/store";
+	import '../public/xp.css';
 	// import Emoji from './components/Emoji.svelte';
 
 	const projects = [
@@ -173,6 +174,8 @@
 							i yap, code cool shit, and push breaking changes to prod on fridays.
 							<br /><br />
 							i fuck around and sometimes it ends up looking nice
+							<br /><br />
+							whatever u do <strong>DONT</strong> click on grim 🙁 (the skeleton)
 						</div>
 					</div>
 					<div id="contacts">

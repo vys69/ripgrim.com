@@ -15,10 +15,6 @@ let isDeathAnimationComplete = false;
   }
 
   const nekoEl = document.createElement("div");
-  const audioEl = document.createElement("audio");
-  audioEl.src = "./untitled.mp3"; // Replace with your sound file path
-  audioEl.preload = "auto";
-  document.body.appendChild(audioEl);
 
   let nekoPosX = 32;
   let nekoPosY = 32;
