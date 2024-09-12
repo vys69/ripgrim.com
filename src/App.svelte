@@ -154,10 +154,7 @@
 		showInfoWindow = !showInfoWindow;
 	}
 
-	let openWindows = [];
-	windowStore.subscribe(windows => {
-		openWindows = windows.filter(w => w.isOpen);
-	});
+	$: openWindows = $windowStore.filter(w => w.isOpen);
 </script>
 
 <svelte:head>
@@ -264,7 +261,6 @@
 									style="width: 300px; margin-bottom: 20px; position: relative; transform: translate({draggedWindow && draggedWindow.id === window.id ? draggedWindow.x : 0}px, {draggedWindow && draggedWindow.id === window.id ? draggedWindow.y : 0}px);"
 									transition:fade="{{ duration: 300 }}"
 								>
-									<!-- svelte-ignore a11y-no-static-element-interactions -->
 									<div
 										class="title-bar"
 										on:mousedown={e => startDragging(window.id, e)}
@@ -351,6 +347,10 @@
 			inset 1px 1px #aca899,
 			inset -2px -2px #dfcfc3,
 			inset 2px 2px #808080;
+	}
+
+	.xp-footer-middle {
+		width: 100%;
 	}
 
 	.winxp-background {

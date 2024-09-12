@@ -4,26 +4,21 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear",
-    "deploy": "npm run build && npx gh-pages -d build"
+    "start": "sirv public --no-clear"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-terser": "^0.4.0",
-    "@sveltejs/adapter-static": "^3.0.4",
-    "gh-pages": "^6.1.1",
     "rollup": "^3.15.0",
     "rollup-plugin-css-only": "^4.3.0",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.1.2",
-    "svelte": "^4.0.0"
+    "svelte": "^3.55.0"
   },
   "dependencies": {
-    "@sveltejs/kit": "^2.5.26",
-    "sirv-cli": "^2.0.0",
-    "vercel": "^37.4.2"
+    "sirv-cli": "^2.0.0"
   }
 }
