@@ -12,6 +12,7 @@ A web-based portfolio mimicking the Windows XP interface.
 - [License](#license)
 
 ## Media
+![screenshot_1](https://github.com/user-attachments/assets/8929c2dc-efc8-4f7a-8ccb-03342643f157)
 
 ## Features
 
