@@ -89,8 +89,7 @@
         box-shadow: inset 0 1px 0 0 #000000;
     }
 
-    /* .xp-footer::before {
-        content: "";
+    .xp-footer::before {
         content: "";
         position: absolute;
         top: 0;
@@ -100,7 +99,7 @@
         background-color: rgba(0, 0, 0, 0.5);
         z-index: -1;
         height: 40px;
-    } */
+    }
 
     .xp-footer-inner {
         display: flex;
