@@ -6,6 +6,6 @@ const app = new App({
 });
 
 // Initialize Vercel Analytics
-inject({ mode: 'development' });
+inject();
 
 export default app;
