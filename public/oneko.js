@@ -66,7 +66,7 @@ let isDeathAnimationComplete = false;
     `;
     document.head.appendChild(style);
 
-    let nekoFile = "./testbig.gif"
+    let nekoFile = "./spritesheet.gif"
     const curScript = document.currentScript
     if (curScript && curScript.dataset.cat) {
       nekoFile = curScript.dataset.cat
