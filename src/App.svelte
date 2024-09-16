@@ -37,8 +37,8 @@
 			id: "graveyard_project",
 			name: "graveyard",
 			url: "graveyard.rip",
-			taskbar_icon: "/graveyard.png",
-			icon: "/graveyard.png",
+			taskbar_icon: "/favi.png",
+			icon: "/favi.png",
 			description:
 				"free and open source client management dashboard with a seamless discord integration. clients can browse premade projects, your portfolio, or fill out a form for whatever the fuck u want. also it's just a really pretty website.",
 			disabled: true,
