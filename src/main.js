@@ -1,5 +1,4 @@
 import App from './App.svelte';
-import { dev } from '$app/environment';
 import { inject } from '@vercel/analytics';
 
 const app = new App({
@@ -7,6 +6,6 @@ const app = new App({
 });
 
 // Initialize Vercel Analytics
-inject({ mode: dev ? 'development' : 'production' });
+inject({ mode: 'development' });
 
 export default app;
