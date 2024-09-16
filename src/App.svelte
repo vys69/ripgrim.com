@@ -107,8 +107,8 @@
 			highestZIndex++;
 			draggedWindow = {
 				id,
-				startX: event.clientX,
-				startY: event.clientY,
+				startX: event.type.includes('mouse') ? event.clientX : event.touches[0].clientX,
+				startY: event.type.includes('mouse') ? event.clientY : event.touches[0].clientY,
 				x: 0,
 				y: 0,
 				zIndex: highestZIndex
@@ -133,16 +133,20 @@
 
 	function drag(event) {
 		if (draggedWindow) {
-			const easeFactor = 0.1; // Adjust this to change the easing strength
+			const clientX = event.type.includes('mouse') ? event.clientX : event.touches[0].clientX;
+			const clientY = event.type.includes('mouse') ? event.clientY : event.touches[0].clientY;
+			
+			const easeFactor = 0.2;
+			const rawX = clientX - draggedWindow.startX;
+			const rawY = clientY - draggedWindow.startY;
 
-			const rawX = event.clientX - draggedWindow.startX;
-			const rawY = event.clientY - draggedWindow.startY;
-
-			// Apply easing function
 			const easeFunction = (x) => Math.sign(x) * Math.log(1 + Math.abs(x) * easeFactor) / easeFactor;
 
 			draggedWindow.x = easeFunction(rawX);
 			draggedWindow.y = easeFunction(rawY);
+			
+			// Prevent default to stop scrolling on mobile
+			event.preventDefault();
 		}
 	}
 
@@ -185,7 +189,12 @@
 	<link rel="stylesheet" href="https://unpkg.com/xp.css" />
 </svelte:head>
 
-<svelte:window on:mousemove={drag} on:mouseup={stopDragging} />
+<svelte:window 
+    on:mousemove={drag}
+    on:touchmove={drag}
+    on:mouseup={stopDragging}
+    on:touchend={stopDragging}
+/>
 
 <div class="xp-container winxp-background">
 	<div id="scroll-container" class="center">
@@ -333,6 +342,7 @@
 	:global(*) {
 		box-sizing: border-box;
 		user-select: none;
+		touch-action: none;
 	}
 
 	.xp-container {
@@ -525,5 +535,9 @@
 	.taskbar-icon img {
 		width: 20px;
 		height: 20px;
+	}
+
+	.window {
+		touch-action: none;
 	}
 </style>

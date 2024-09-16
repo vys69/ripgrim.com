@@ -32,6 +32,7 @@
     <div
       class="title-bar"
       on:mousedown={(e) => startDragging(id, e)}
+      on:touchstart={(e) => startDragging(id, e)}
     >
       <div class="title-bar-text">
         <img
