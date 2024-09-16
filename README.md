@@ -2,6 +2,17 @@
 
 A web-based portfolio mimicking the Windows XP interface.
 
+## Table of Contents
+- [Media](#media)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Setup](#setup)
+- [Building](#building)
+- [Customization](#customization)
+- [License](#license)
+
+## Media
+
 ## Features
 
 - Windows XP-inspired UI
