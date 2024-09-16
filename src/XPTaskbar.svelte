@@ -53,13 +53,13 @@
     {#if showInfoWindow}
         <div class="info-window">
             <p>hi lol</p>
+            <a href="https://github.com/vys69/ripgrim.com">repo</a>
             <button on:click={toggleInfoWindow}>Close</button>
         </div>
     {/if}
 </div>
 
 <style>
-
     .taskbar-icon-container {
         display: flex;
         flex-direction: row;
@@ -195,6 +195,15 @@
         font-family: "Tahoma", sans-serif;
         font-size: 11px;
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .info-window a {
+        color: #000;
+        text-decoration: underline;
     }
 
     .info-window button {
@@ -209,9 +218,8 @@
 
     .xp-footer-middle {
         flex: 1;
-        
+
         overflow-y: auto;
-        
     }
 
     .xp-footer-middle::-webkit-scrollbar {
