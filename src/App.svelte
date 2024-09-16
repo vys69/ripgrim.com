@@ -202,7 +202,7 @@
 			<section id="introduction" class="section row">
 				<div id="introduction-top">
 					<div class="paragraph">
-						<div class="title">hi lol, i'm grim</div>
+						<div class="title"><span class="wiggle">hi </span> lol, i'm grim</div>
 						<div class="body">
 							i yap, code cool shit, and push breaking changes to
 							prod on fridays.
@@ -339,6 +339,34 @@
 </XPTaskbar>
 
 <style>
+
+	@keyframes wiggle {
+		0% {
+			transform: rotate(0deg);
+		}
+		20% {
+			transform: rotate(-5deg);
+		}
+		40% {
+			transform: rotate(5deg);
+		}
+		60% {
+			transform: rotate(-5deg);
+		}
+		80% {
+			transform: rotate(5deg);
+		}
+		100% {
+			transform: rotate(0deg);
+		}
+	}
+
+	.wiggle {
+		animation: wiggle 2s infinite;
+		display: inline-block;
+		transform-origin: center;
+	}
+
 	:global(*) {
 		box-sizing: border-box;
 		user-select: none;
@@ -450,8 +478,8 @@
 		-webkit-font-smoothing: antialiased;
 		font-size: 11px;
 		box-sizing: border-box;
-		border: 1px solid #000000;
-		background: linear-gradient(180deg, #3b3b3b, #000000 86%, #4f4f4f);
+		/* border: 1px solid #000000;
+		background: linear-gradient(180deg, #3b3b3b, #000000 86%, #4f4f4f); */
 		box-shadow: none;
 		border-radius: 3px;
 		min-height: 0;
@@ -460,12 +488,14 @@
 	}
 
 	.contact-button:hover svg {
-		stroke: white;
+		stroke: rgb(170, 170, 170);
+		transition: all 0.1s ease-in-out;
 	}
 
 	.contact-button svg {
 		height: 100%;
-		stroke: #7b7b7b;
+		stroke: white;
+		transition: all 0.1s ease-in-out;
 	}
 
 	#projects {
