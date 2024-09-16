@@ -82,6 +82,7 @@ button:focus {
     padding: 0 0 3px;
     -webkit-font-smoothing: antialiased;
     transition: transform 0.3s ease-out;
+	touch-action: none;
 }
 
 .window:active {

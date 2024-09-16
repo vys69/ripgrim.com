@@ -631,8 +631,4 @@
 		width: 20px;
 		height: 20px;
 	}
-
-	.window {
-		touch-action: none;
-	}
 </style>
