@@ -59,9 +59,6 @@
 </div>
 
 <style>
-    .xp-footer-middle {
-        width: 100%;
-    }
 
     .taskbar-icon-container {
         display: flex;
@@ -92,7 +89,7 @@
         box-shadow: inset 0 1px 0 0 #000000;
     }
 
-    .xp-footer::before {
+    /* .xp-footer::before {
         content: "";
         content: "";
         position: absolute;
@@ -103,7 +100,7 @@
         background-color: rgba(0, 0, 0, 0.5);
         z-index: -1;
         height: 40px;
-    }
+    } */
 
     .xp-footer-inner {
         display: flex;
@@ -213,11 +210,9 @@
 
     .xp-footer-middle {
         flex: 1;
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* Internet Explorer 10+ */
+        
+        overflow-y: auto;
+        
     }
 
     .xp-footer-middle::-webkit-scrollbar {

@@ -20,6 +20,18 @@
 			description:
 				"web development agency without the bullshit. we innovate. that's it. none of this stupid marketing trickery. what you see is what you get.",
 			disabled: false,
+			social_links: [
+				{
+					name: "twitter",
+					url: "https://x.com/fuckgrimlabs",
+					icon: "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-black-icon.png",
+				},
+				{
+					name: "github",
+					url: "https://github.com/vys69",
+					icon: "https://github.com/favicon.ico",
+				},
+			],
 		},
 		{
 			id: "graveyard_project",
@@ -332,6 +344,7 @@
 										buttonUrl={project.disabled
 											? null
 											: `https://${project.url}`}
+										social_links={project.social_links}
 										disabled={project.disabled}
 										{draggedWindow}
 										{startDragging}

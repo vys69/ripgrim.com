@@ -3,6 +3,7 @@
     import { quintOut } from "svelte/easing";
 
     export let id;
+    export let social_links = [];
     export let icon;
     export let title;
     export let controls = ["Minimize", "Maximize", "Close"];
@@ -56,8 +57,19 @@
       <p>{description}</p>
       <div
         class="field-row"
-        style="justify-content: flex-end;"
+        style="justify-content: space-between; margin: 0 5px;"
       >
+      <div class="social-links">
+        {#if social_links && social_links.length}
+            {#each social_links as link}
+                {#if link && link.url && link.name}
+                <a href={link.url} target="_blank" rel="noopener noreferrer nofollow">
+                    {link.name}
+                </a>
+                {/if}
+            {/each}
+        {/if}
+      </div>
         <a
           href={disabled ? null : buttonUrl}
           target="_blank"
