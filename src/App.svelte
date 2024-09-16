@@ -7,9 +7,8 @@
 	import "../public/xp.css";
 	import Device from "svelte-device-info";
 	import XPWindow from "./components/XPWindow.svelte";
-    import Emoji from "./components/Emoji.svelte";
-    import { flip } from 'svelte/animate';
-	
+	import Emoji from "./components/Emoji.svelte";
+	import { flip } from "svelte/animate";
 
 	const projects = [
 		{
@@ -88,14 +87,27 @@
 	let draggedWindow = null;
 	let highestZIndex = 1;
 
+	let flashingIcons = new Set();
+
 	function toggleWindow(id) {
 		windowStore.update((windows) => {
 			const windowIndex = windows.findIndex((w) => w.id === id);
 			if (windowIndex !== -1) {
 				windows[windowIndex].isOpen = !windows[windowIndex].isOpen;
+				if (windows[windowIndex].isOpen) {
+					flashingIcons.add(id);
+					setTimeout(() => {
+						flashingIcons.delete(id);
+						flashingIcons = flashingIcons; // trigger reactivity
+					}, 3000);
+				}
 			} else if (projects.some((p) => p.id === id)) {
-				// If the window doesn't exist in the store but exists in projects, add it
 				windows.push({ id, isOpen: true });
+				flashingIcons.add(id);
+				setTimeout(() => {
+					flashingIcons.delete(id);
+					flashingIcons = flashingIcons; // trigger reactivity
+				}, 3000);
 			}
 			return windows;
 		});
@@ -107,16 +119,22 @@
 			highestZIndex++;
 			draggedWindow = {
 				id,
-				startX: event.type.includes('mouse') ? event.clientX : event.touches[0].clientX,
-				startY: event.type.includes('mouse') ? event.clientY : event.touches[0].clientY,
+				startX: event.type.includes("mouse")
+					? event.clientX
+					: event.touches[0].clientX,
+				startY: event.type.includes("mouse")
+					? event.clientY
+					: event.touches[0].clientY,
 				x: 0,
 				y: 0,
-				zIndex: highestZIndex
+				zIndex: highestZIndex,
 			};
-			
+
 			// Update the window's z-index in the store
-			windowStore.update(windows => 
-				windows.map(w => w.id === id ? {...w, zIndex: highestZIndex} : w)
+			windowStore.update((windows) =>
+				windows.map((w) =>
+					w.id === id ? { ...w, zIndex: highestZIndex } : w,
+				),
 			);
 		}
 	}
@@ -124,8 +142,10 @@
 	function stopDragging() {
 		if (draggedWindow) {
 			// Reset the z-index to a base value when dragging stops
-			windowStore.update(windows => 
-				windows.map(w => w.id === draggedWindow.id ? {...w, zIndex: 1} : w)
+			windowStore.update((windows) =>
+				windows.map((w) =>
+					w.id === draggedWindow.id ? { ...w, zIndex: 1 } : w,
+				),
 			);
 			draggedWindow = null;
 		}
@@ -133,18 +153,24 @@
 
 	function drag(event) {
 		if (draggedWindow) {
-			const clientX = event.type.includes('mouse') ? event.clientX : event.touches[0].clientX;
-			const clientY = event.type.includes('mouse') ? event.clientY : event.touches[0].clientY;
-			
+			const clientX = event.type.includes("mouse")
+				? event.clientX
+				: event.touches[0].clientX;
+			const clientY = event.type.includes("mouse")
+				? event.clientY
+				: event.touches[0].clientY;
+
 			const easeFactor = 0.2;
 			const rawX = clientX - draggedWindow.startX;
 			const rawY = clientY - draggedWindow.startY;
 
-			const easeFunction = (x) => Math.sign(x) * Math.log(1 + Math.abs(x) * easeFactor) / easeFactor;
+			const easeFunction = (x) =>
+				(Math.sign(x) * Math.log(1 + Math.abs(x) * easeFactor)) /
+				easeFactor;
 
 			draggedWindow.x = easeFunction(rawX);
 			draggedWindow.y = easeFunction(rawY);
-			
+
 			// Prevent default to stop scrolling on mobile
 			event.preventDefault();
 		}
@@ -182,18 +208,18 @@
 
 	$: openWindows = $windowStore.filter((w) => w.isOpen);
 
-  let flipDuration = 300;
+	let flipDuration = 300;
 </script>
 
 <svelte:head>
 	<link rel="stylesheet" href="https://unpkg.com/xp.css" />
 </svelte:head>
 
-<svelte:window 
-    on:mousemove={drag}
-    on:touchmove={drag}
-    on:mouseup={stopDragging}
-    on:touchend={stopDragging}
+<svelte:window
+	on:mousemove={drag}
+	on:touchmove={drag}
+	on:mouseup={stopDragging}
+	on:touchend={stopDragging}
 />
 
 <div class="xp-container winxp-background">
@@ -202,7 +228,9 @@
 			<section id="introduction" class="section row">
 				<div id="introduction-top">
 					<div class="paragraph">
-						<div class="title"><span class="wiggle">hi </span> lol, i'm grim</div>
+						<div class="title">
+							<span class="wiggle">hi </span> lol, i'm grim
+						</div>
 						<div class="body">
 							i yap, code cool shit, and push breaking changes to
 							prod on fridays.
@@ -288,7 +316,7 @@
 				<div id="projects">
 					<div id="project-card-area">
 						{#each openWindows as window (window.id)}
-							<div animate:flip={{duration: flipDuration}}>
+							<div animate:flip={{ duration: flipDuration }}>
 								{#if projects.some((p) => p.id === window.id)}
 									{@const project = projects.find(
 										(p) => p.id === window.id,
@@ -298,8 +326,12 @@
 										icon={project.icon}
 										title={project.name}
 										description={project.description}
-										buttonText={project.disabled ? "Coming Soon" : project.url}
-										buttonUrl={project.disabled ? null : `https://${project.url}`}
+										buttonText={project.disabled
+											? "Coming Soon"
+											: project.url}
+										buttonUrl={project.disabled
+											? null
+											: `https://${project.url}`}
 										disabled={project.disabled}
 										{draggedWindow}
 										{startDragging}
@@ -318,46 +350,61 @@
 
 <XPTaskbar>
 	<svelte:fragment slot="taskbar-icons">
-		{#each projects as project (project.id)}
-			<button
-				class="taskbar-icon {$windowStore.find(
-					(w) => w.id === project.id,
-				)?.isOpen
-					? 'opened'
-					: ''}"
-				on:click={() => toggleWindow(project.id)}
-			>
-				<img src={project.taskbar_icon} alt={project.name} />
-				<span class="taskbar-icon-text">
-					{$windowStore.find((w) => w.id === project.id)?.isOpen
-						? project.name
-						: ""}
-				</span>
-			</button>
-		{/each}
+	  {#each projects as project (project.id)}
+		<button
+			class="taskbar-icon {$windowStore.find(
+				(w) => w.id === project.id,
+			)?.isOpen
+			? 'opened'
+			: ''} {flashingIcons.has(project.id) ? 'flashing' : ''}"
+		  on:click={() => toggleWindow(project.id)}
+		>
+		  <img src={project.taskbar_icon} alt={project.name} />
+		  <span class="taskbar-icon-text">
+			{$windowStore.find((w) => w.id === project.id)?.isOpen
+			  ? project.name
+			  : ""}
+		  </span>
+		</button>
+	  {/each}
 	</svelte:fragment>
-</XPTaskbar>
+  </XPTaskbar>
 
 <style>
 
-	@keyframes wiggle {
-		0% {
-			transform: rotate(0deg);
-		}
-		20% {
-			transform: rotate(-5deg);
-		}
-		40% {
-			transform: rotate(5deg);
-		}
-		60% {
-			transform: rotate(-5deg);
-		}
-		80% {
-			transform: rotate(5deg);
-		}
+	.flashing::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-image: linear-gradient(
+			135deg,
+			#e5a01a 0%,
+			#fbc761 25%,
+			#fdd889 50%,
+			#fff0cf 75%,
+			#e5a01a 100%
+		);
+		opacity: 1;
+		animation: fadeGradient 2s ease-in-out infinite;
+		animation-fill-mode: forwards;
+		z-index: -2;
+		filter: saturate(0);
+	}
+
+	@keyframes fadeGradient {
+		0%,
 		100% {
-			transform: rotate(0deg);
+			opacity: 0;
+		}
+		25%,
+		75% {
+			opacity: 0.5;
+		}
+		50% {
+			opacity: 0.7;
 		}
 	}
 
@@ -390,7 +437,7 @@
 		color: white;
 	}
 
-	.winxp-background::before{
+	.winxp-background::before {
 		content: "";
 		position: absolute;
 		top: 0;
@@ -545,6 +592,11 @@
 		padding: 2px;
 		margin: 0 2px;
 		min-width: 0;
+	}
+
+	.taskbar-icon img {
+		border-radius: 3px;
+		margin-left: 3px;
 	}
 
 	.taskbar-icon.opened {
