@@ -54,24 +54,6 @@
 		},
 	];
 
-	const emojis = [
-		{
-			name: "reaper",
-			url: "https://attic.sh/j3wq2ew1c02jhynbaa2nrj94te9q",
-			size: "3rem",
-		},
-		{
-			name: "reaper2",
-			url: "https://attic.sh/6osk5yjba6kbznkyr2jlfdrrxyep",
-			size: "3rem",
-		},
-		{
-			name: "skull",
-			url: "https://attic.sh/6osk5yjba6kbznkyr2jlfdrrxyep",
-			size: "3rem",
-		},
-	];
-
 	// Function to load window states from local storage
 	function loadWindowStates() {
 		const savedStates = localStorage.getItem("windowStates");
@@ -211,12 +193,7 @@
 		};
 	});
 
-	function toggleInfoWindow() {
-		showInfoWindow = !showInfoWindow;
-	}
-
-	const desktopDontClickGrim =
-		"whatever u do DONT click on grim 🙁 (the skeleton)";
+	const desktopDontClickGrim = "whatever u do DONT click on grim 🙁 (the skeleton)";
 
 	$: openWindows = $windowStore.filter((w) => w.isOpen);
 
@@ -363,272 +340,22 @@
 
 <XPTaskbar>
 	<svelte:fragment slot="taskbar-icons">
-	  {#each projects as project (project.id)}
-		<button
-			class="taskbar-icon {$windowStore.find(
-				(w) => w.id === project.id,
-			)?.isOpen
-			? 'opened'
-			: ''} {flashingIcons.has(project.id) ? 'flashing' : ''}"
-		  on:click={() => toggleWindow(project.id)}
-		>
-		  <img src={project.taskbar_icon} alt={project.name} />
-		  <span class="taskbar-icon-text">
-			{$windowStore.find((w) => w.id === project.id)?.isOpen
-			  ? project.name
-			  : ""}
-		  </span>
-		</button>
-	  {/each}
+		{#each projects as project (project.id)}
+			<button
+				class="taskbar-icon {$windowStore.find(
+					(w) => w.id === project.id,
+				)?.isOpen
+					? 'opened'
+					: ''} {flashingIcons.has(project.id) ? 'flashing' : ''}"
+				on:click={() => toggleWindow(project.id)}
+			>
+				<img src={project.taskbar_icon} alt={project.name} />
+				<span class="taskbar-icon-text">
+					{$windowStore.find((w) => w.id === project.id)?.isOpen
+						? project.name
+						: ""}
+				</span>
+			</button>
+		{/each}
 	</svelte:fragment>
-  </XPTaskbar>
-
-<style>
-
-	.flashing::before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-image: linear-gradient(
-			135deg,
-			#e5a01a 0%,
-			#fbc761 25%,
-			#fdd889 50%,
-			#fff0cf 75%,
-			#e5a01a 100%
-		);
-		opacity: 1;
-		animation: fadeGradient 2s ease-in-out infinite;
-		animation-fill-mode: forwards;
-		z-index: -2;
-		filter: saturate(0);
-	}
-
-	@keyframes fadeGradient {
-		0%,
-		100% {
-			opacity: 0;
-		}
-		25%,
-		75% {
-			opacity: 0.5;
-		}
-		50% {
-			opacity: 0.7;
-		}
-	}
-
-	.wiggle {
-		animation: wiggle 2s infinite;
-		display: inline-block;
-		transform-origin: center;
-	}
-
-	:global(*) {
-		box-sizing: border-box;
-		user-select: none;
-		touch-action: none;
-	}
-
-	.xp-container {
-		font-family: "Pixelated MS Sans Serif", Arial;
-		-webkit-font-smoothing: none;
-		font-smooth: never;
-		padding-bottom: 30px;
-	}
-
-	.winxp-background {
-		background-image: url("/bg.jpg");
-		background-size: cover;
-		background-position: center;
-		background-attachment: fixed;
-		min-height: 100vh;
-		background-color: #000;
-		color: white;
-	}
-
-	.winxp-background::before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.25);
-	}
-
-	#scroll-container {
-		display: flex;
-		justify-content: center;
-		width: 100%;
-		gap: 2.5rem;
-	}
-
-	#scroll-container.center {
-		align-items: center;
-		min-height: 100vh;
-	}
-
-	#body-content {
-		display: flex;
-		flex-direction: column;
-		width: 90%;
-		max-width: 1200px;
-		margin-top: 2rem;
-		position: relative;
-		padding: 20px;
-		border-radius: 8px;
-	}
-
-	.section {
-		display: flex;
-		flex-direction: column;
-		position: relative;
-		gap: 1rem;
-	}
-
-	.section.row {
-		flex-direction: row;
-		justify-content: space-around;
-	}
-
-	#introduction-top {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-		justify-content: center;
-	}
-
-	.paragraph {
-		display: flex;
-		width: 100%;
-		max-width: 22rem;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.8rem;
-	}
-
-	.title {
-		font-size: 1.75rem;
-		line-height: 120%;
-		font-weight: bold;
-		color: white;
-		mix-blend-mode: difference;
-	}
-
-	.body {
-		font-size: 1rem;
-		line-height: 140%;
-		/* white-space: pre-wrap; */
-		color: #ece9d8;
-		text-shadow: 1px 1px 1px black;
-	}
-
-	#contacts {
-		display: flex;
-		flex-direction: row;
-		gap: 0.5rem;
-	}
-
-	.contact-button {
-		font-family: "Pixelated MS Sans Serif", Arial;
-		-webkit-font-smoothing: antialiased;
-		font-size: 11px;
-		box-sizing: border-box;
-		/* border: 1px solid #000000;
-		background: linear-gradient(180deg, #3b3b3b, #000000 86%, #4f4f4f); */
-		box-shadow: none;
-		border-radius: 3px;
-		min-height: 0;
-		height: 27px;
-		padding: 3px 10px;
-	}
-
-	.contact-button:hover svg {
-		stroke: rgb(170, 170, 170);
-		transition: all 0.1s ease-in-out;
-	}
-
-	.contact-button svg {
-		height: 100%;
-		stroke: white;
-		transition: all 0.1s ease-in-out;
-	}
-
-	#projects {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	#project-card-area {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		max-width: 22rem;
-	}
-
-	@media (max-width: 830px) {
-		.section.row {
-			flex-direction: column;
-			justify-content: normal;
-		}
-
-		#scroll-container.center {
-			align-items: normal;
-			height: initial;
-		}
-
-		#body-content {
-			margin-top: 1rem;
-		}
-
-		#introduction {
-			padding-top: 0;
-		}
-	}
-
-	@media (max-width: 500px) {
-		.paragraph,
-		#project-card-area {
-			width: 100%;
-		}
-	}
-
-	.taskbar-icon {
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 2px;
-		margin: 0 2px;
-		min-width: 0;
-	}
-
-	.taskbar-icon img {
-		border-radius: 3px;
-		margin-left: 3px;
-	}
-
-	.taskbar-icon.opened {
-		display: flex;
-		align-items: center;
-		height: 30px;
-		width: 100px;
-		gap: 5px;
-	}
-
-	.taskbar-icon.opened {
-		background-color: rgb(0 0 0 / 64%);
-		border: 1px solid rgba(255, 255, 255, 0.3);
-		color: white;
-		backdrop-filter: blur(2px);
-	}
-
-	.taskbar-icon img {
-		width: 20px;
-		height: 20px;
-	}
-</style>
+</XPTaskbar>
