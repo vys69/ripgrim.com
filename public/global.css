@@ -15,6 +15,7 @@ body {
 	font-family: "Pixelated MS Sans Serif", Arial !important;
 	-webkit-font-smoothing: none;
 	font-smooth: never;
+	overflow-y: hidden;
 }
 
  .xp-footer-middle{
@@ -69,4 +70,70 @@ button:not(:disabled):active {
 
 button:focus {
 	border-color: #666;
+}
+
+/*window*/
+.window {
+    box-shadow:
+        inset -1px -1px #000000,
+        inset 1px 1px #000,
+        inset -2px -2px #000,
+        inset 2px 2px #000,
+        inset -3px -3px #000,
+        inset 3px 3px #000 !important;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 0 0 3px;
+    -webkit-font-smoothing: antialiased;
+    transition: transform 0.3s ease-out;
+}
+
+.window:active {
+    transition: none;
+}
+
+/* .window:hover {
+    transform: skew(1deg, -1deg);
+} */
+
+/*title bar*/
+.title-bar {
+    cursor: move;
+    background-image: url("/titlebar.jpg") !important;
+    background-size: cover !important;
+    background-position: 80% !important;
+    background-attachment: fixed !important;
+    border-top: 1px solid #000 !important;
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+}
+
+
+.title-bar > * {
+    position: relative;
+    z-index: 2;
+}
+
+.title-bar-controls button {
+    filter: saturate(0) brightness(0.7) contrast(2.3) !important;
+}
+
+/*button*/
+.xp-button {
+	color: black;
+	font-weight: normal;
+	background-color: #ece9d8;
+	border: 1px solid #003c74;
+	box-shadow:
+		inset -1px -1px #ffffff,
+		inset 1px 1px #ffffff,
+		inset -2px -2px #aca899,
+		inset 2px 2px #dfcfc3;
+	padding: 3px 5px;
+	min-width: 75px;
+	text-align: center;
+}
+
+.project-link {
+	text-decoration: none;
 }

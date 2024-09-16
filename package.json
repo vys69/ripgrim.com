@@ -23,6 +23,7 @@
   "dependencies": {
     "@sveltejs/kit": "^2.5.26",
     "sirv-cli": "^2.0.0",
+    "svelte-device-info": "^1.0.6",
     "vercel": "^37.4.2"
   }
 }

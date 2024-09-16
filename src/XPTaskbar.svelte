@@ -59,10 +59,16 @@
 </div>
 
 <style>
+    .xp-footer-middle {
+        width: 100%;
+    }
+
     .taskbar-icon-container {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
+        min-width: min-content; /* Ensures container doesn't shrink smaller than its content */
+        padding: 0 5px;
     }
 
     .xp-footer {
@@ -71,17 +77,32 @@
         left: 0;
         right: 0;
         height: 40px;
-        background: linear-gradient(
+        /* background: linear-gradient(
             to bottom,
             #2584e1 0%,
             #3c81f3 9%,
             #3c81f3 91%,
             #2584e1 100%
-        );
+        ); */
+        background-image: url("/titlebar.jpg");
+        background-size: cover;
         display: flex;
         align-items: center;
         padding: 0 2px;
-        box-shadow: inset 0 1px 0 0 #6f9fe8;
+        box-shadow: inset 0 1px 0 0 #000000;
+    }
+
+    .xp-footer::before {
+        content: "";
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+        height: 40px;
     }
 
     .xp-footer-inner {
@@ -99,11 +120,11 @@
 
     .start-button {
         align-items: center;
-        background: radial-gradient(circle, #5eac56 0, #3c873c 100%) 50% / cover
+        background: radial-gradient(circle, #272727 0, #000000 100%) 50% / cover
             no-repeat;
         border: none;
         border-radius: 0 10px 15px 0;
-        box-shadow: inset 0 5px 10px #79ce71;
+        box-shadow: inset 0 5px 10px #3b3b3b;
         color: #fff;
         display: flex;
         font-size: 18px;
@@ -123,21 +144,22 @@
         height: 20px;
         margin-right: 5px;
         transform: skewX(3deg);
+        filter: saturate(0) contrast(1.5);
     }
 
     .xp-footer-end {
         align-items: center;
         background: linear-gradient(
             180deg,
-            #00639b 0,
-            #21afff 9%,
-            #009bf1 18%,
-            #0096e9 92%,
+            #2f2f2f 0,
+            #1a1a1a 9%,
+            #232323 18%,
+            #212121 92%,
             #333
         );
         box-shadow:
-            inset 1px 0 #1f78b1,
-            inset 2px 0 #44a4e8;
+            inset 1px 0 #000000,
+            inset 2px 0 #3b3b3b;
         display: flex;
         height: 100%;
         padding: 0 10px;
@@ -158,6 +180,7 @@
     .info-button img {
         width: 16px;
         height: 16px;
+        filter: saturate(0);
     }
 
     .time-display {
@@ -186,5 +209,18 @@
         font-size: 11px;
         margin-top: 5px;
         cursor: pointer;
+    }
+
+    .xp-footer-middle {
+        flex: 1;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
+    .xp-footer-middle::-webkit-scrollbar {
+        display: none; /* WebKit */
     }
 </style>

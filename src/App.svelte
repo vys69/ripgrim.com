@@ -3,8 +3,9 @@
 	import XPTaskbar from "./XPTaskbar.svelte";
 	import { fade } from "svelte/transition";
 	import { writable } from "svelte/store";
-	import '../public/xp.css';
-	// import Emoji from './components/Emoji.svelte';
+	import "../public/xp.css";
+	import Device from "svelte-device-info";
+	import XPWindow from "./components/XPWindow.svelte";
 
 	const projects = [
 		{
@@ -13,7 +14,8 @@
 			url: "grimlabs.co",
 			taskbar_icon: "/labs.png",
 			icon: "/labs.png",
-			description: "web development agency without the bullshit. we innovate. that's it. none of this stupid marketing trickery. what you see is what you get.",
+			description:
+				"web development agency without the bullshit. we innovate. that's it. none of this stupid marketing trickery. what you see is what you get.",
 			disabled: false,
 		},
 		{
@@ -22,8 +24,9 @@
 			url: "graveyard.rip",
 			taskbar_icon: "/graveyard.png",
 			icon: "/graveyard.png",
-			description: "free and open source client management dashboard with a seamless discord integration. clients can browse premade projects, your portfolio, or fill out a form for whatever the fuck u want. also it's just a really pretty website.",
-			disabled: false,
+			description:
+				"free and open source client management dashboard with a seamless discord integration. clients can browse premade projects, your portfolio, or fill out a form for whatever the fuck u want. also it's just a really pretty website.",
+			disabled: true,
 		},
 		{
 			id: "playground_project",
@@ -34,46 +37,40 @@
 			description: "mess around with our themes without spending a dime",
 			disabled: true,
 		},
-		// {
-		// 	id: "imput_project",
-		// 	name: "imput",
-		// 	url: "imput.net",
-		// 	icon: "https://wukko.me/icons/imput.png",
-		// 	description:
-		// 		"research and development group without bullshit. we fuck around and find out. helped uncover the truth about nothing chats & rabbit r1.",
-		// },
 	];
 
 	const emojis = [
 		{
-			"name": "reaper",
-			"url": "https://attic.sh/j3wq2ew1c02jhynbaa2nrj94te9q",
-			"size": "3rem"
+			name: "reaper",
+			url: "https://attic.sh/j3wq2ew1c02jhynbaa2nrj94te9q",
+			size: "3rem",
 		},
 		{
-			"name": "reaper2",
-			"url": "https://attic.sh/6osk5yjba6kbznkyr2jlfdrrxyep",
-			"size": "3rem"
+			name: "reaper2",
+			url: "https://attic.sh/6osk5yjba6kbznkyr2jlfdrrxyep",
+			size: "3rem",
 		},
 		{
-			"name": "skull",
-			"url": "https://attic.sh/6osk5yjba6kbznkyr2jlfdrrxyep",
-			"size": "3rem"
-		}
-	]
+			name: "skull",
+			url: "https://attic.sh/6osk5yjba6kbznkyr2jlfdrrxyep",
+			size: "3rem",
+		},
+	];
 
 	// Function to load window states from local storage
 	function loadWindowStates() {
-		const savedStates = localStorage.getItem('windowStates');
+		const savedStates = localStorage.getItem("windowStates");
 		if (savedStates) {
 			const parsedStates = JSON.parse(savedStates);
 			// Filter out any saved states that don't correspond to current projects
-			return parsedStates.filter(state => projects.some(p => p.id === state.id));
+			return parsedStates.filter((state) =>
+				projects.some((p) => p.id === state.id),
+			);
 		}
 		// If no saved states, return all windows as open
-		return projects.map(project => ({
+		return projects.map((project) => ({
 			id: project.id,
-			isOpen: true
+			isOpen: true,
 		}));
 	}
 
@@ -81,17 +78,17 @@
 
 	// Save window states to local storage whenever they change
 	$: {
-		localStorage.setItem('windowStates', JSON.stringify($windowStore));
+		localStorage.setItem("windowStates", JSON.stringify($windowStore));
 	}
 
 	let draggedWindow = null;
 
 	function toggleWindow(id) {
-		windowStore.update(windows => {
-			const windowIndex = windows.findIndex(w => w.id === id);
+		windowStore.update((windows) => {
+			const windowIndex = windows.findIndex((w) => w.id === id);
 			if (windowIndex !== -1) {
 				windows[windowIndex].isOpen = !windows[windowIndex].isOpen;
-			} else if (projects.some(p => p.id === id)) {
+			} else if (projects.some((p) => p.id === id)) {
 				// If the window doesn't exist in the store but exists in projects, add it
 				windows.push({ id, isOpen: true });
 			}
@@ -100,14 +97,14 @@
 	}
 
 	function startDragging(id, event) {
-		const targetWindow = $windowStore.find(w => w.id === id);
+		const targetWindow = $windowStore.find((w) => w.id === id);
 		if (targetWindow) {
 			draggedWindow = {
 				id,
 				startX: event.clientX,
 				startY: event.clientY,
 				x: 0,
-				y: 0
+				y: 0,
 			};
 		}
 	}
@@ -121,9 +118,15 @@
 			const maxDistance = 50;
 			const newX = event.clientX - draggedWindow.startX;
 			const newY = event.clientY - draggedWindow.startY;
-			
-			draggedWindow.x = Math.max(-maxDistance, Math.min(maxDistance, newX));
-			draggedWindow.y = Math.max(-maxDistance, Math.min(maxDistance, newY));
+
+			draggedWindow.x = Math.max(
+				-maxDistance,
+				Math.min(maxDistance, newX),
+			);
+			draggedWindow.y = Math.max(
+				-maxDistance,
+				Math.min(maxDistance, newY),
+			);
 		}
 	}
 
@@ -136,9 +139,9 @@
 		}, 1000);
 
 		// Add this part to initialize oneko
-		const script = document.createElement('script');
-		script.src = '/oneko.js'; // Assuming you placed oneko.js in the public folder
-		script.onload = function() {
+		const script = document.createElement("script");
+		script.src = "/oneko.js"; // Assuming you placed oneko.js in the public folder
+		script.onload = function () {
 			console.log("Oneko script loaded");
 		};
 		document.head.appendChild(script);
@@ -154,7 +157,10 @@
 		showInfoWindow = !showInfoWindow;
 	}
 
-	$: openWindows = $windowStore.filter(w => w.isOpen);
+	const desktopDontClickGrim =
+		"whatever u do DONT click on grim 🙁 (the skeleton)";
+
+	$: openWindows = $windowStore.filter((w) => w.isOpen);
 </script>
 
 <svelte:head>
@@ -171,11 +177,12 @@
 					<div class="paragraph">
 						<div class="title">hi i'm grim</div>
 						<div class="body">
-							i yap, code cool shit, and push breaking changes to prod on fridays.
+							i yap, code cool shit, and push breaking changes to
+							prod on fridays.
 							<br /><br />
 							i fuck around and sometimes it ends up looking nice
 							<br /><br />
-							whatever u do <strong>DONT</strong> click on grim 🙁 (the skeleton)
+							{Device.isMobile ? "" : desktopDontClickGrim}
 						</div>
 					</div>
 					<div id="contacts">
@@ -254,36 +261,22 @@
 				<div id="projects">
 					<div id="project-card-area">
 						{#each openWindows as window (window.id)}
-							{#if projects.some(p => p.id === window.id)}
-								{@const project = projects.find(p => p.id === window.id)}
-								<div 
-									class="window" 
-									style="width: 300px; margin-bottom: 20px; position: relative; transform: translate({draggedWindow && draggedWindow.id === window.id ? draggedWindow.x : 0}px, {draggedWindow && draggedWindow.id === window.id ? draggedWindow.y : 0}px);"
-									transition:fade="{{ duration: 300 }}"
-								>
-									<div
-										class="title-bar"
-										on:mousedown={e => startDragging(window.id, e)}
-									>
-										<div class="title-bar-text">
-											<img class="project-icon" src={project.icon} alt="{project.name} logo" style="width: 16px; height: 16px; margin-right: 5px;">
-											{project.name}
-										</div>
-										<div class="title-bar-controls">
-											<button aria-label="Minimize"></button>
-											<button aria-label="Maximize"></button>
-											<button aria-label="Close" on:click={() => toggleWindow(window.id)}></button>
-										</div>
-									</div>
-									<div class="window-body">
-										<p>{project.description}</p>
-										<div class="field-row" style="justify-content: flex-end;">
-											<a href={project.disabled ? null : `https://${project.url}`} target="_blank" rel="noopener noreferrer nofollow" class="project-link" class:disabled={project.disabled}>
-												<button class="xp-button">{project.disabled ? 'Coming Soon' : project.url}</button>
-											</a>
-										</div>
-									</div>
-								</div>
+							{#if projects.some((p) => p.id === window.id)}
+								{@const project = projects.find(
+									(p) => p.id === window.id,
+								)}
+								<XPWindow
+									id={window.id}
+									icon={project.icon}
+									title={project.name}
+									description={project.description}
+									buttonText={project.disabled ? "Coming Soon" : project.url}
+									buttonUrl={project.disabled ? null : `https://${project.url}`}
+									disabled={project.disabled}
+									{draggedWindow}
+									{startDragging}
+									{toggleWindow}
+								/>
 							{/if}
 						{/each}
 					</div>
@@ -296,13 +289,19 @@
 <XPTaskbar>
 	<svelte:fragment slot="taskbar-icons">
 		{#each projects as project (project.id)}
-			<button 
-				class="taskbar-icon {$windowStore.find(w => w.id === project.id)?.isOpen ? 'opened' : ''}" 
+			<button
+				class="taskbar-icon {$windowStore.find(
+					(w) => w.id === project.id,
+				)?.isOpen
+					? 'opened'
+					: ''}"
 				on:click={() => toggleWindow(project.id)}
 			>
 				<img src={project.taskbar_icon} alt={project.name} />
 				<span class="taskbar-icon-text">
-					{$windowStore.find(w => w.id === project.id)?.isOpen ? project.name : ""}
+					{$windowStore.find((w) => w.id === project.id)?.isOpen
+						? project.name
+						: ""}
 				</span>
 			</button>
 		{/each}
@@ -322,43 +321,14 @@
 		padding-bottom: 30px;
 	}
 
-	.xp-button {
-		color: black;
-		font-weight: normal;
-		background-color: #ece9d8;
-		border: 1px solid #003c74;
-		box-shadow:
-			inset -1px -1px #ffffff,
-			inset 1px 1px #ffffff,
-			inset -2px -2px #aca899,
-			inset 2px 2px #dfcfc3;
-		padding: 3px 5px;
-		min-width: 75px;
-		text-align: center;
-	}
-
-	.xp-button:hover {
-		background-color: #ffe7a2;
-	}
-
-	.xp-button:active {
-		box-shadow:
-			inset -1px -1px #ffffff,
-			inset 1px 1px #aca899,
-			inset -2px -2px #dfcfc3,
-			inset 2px 2px #808080;
-	}
-
-	.xp-footer-middle {
-		width: 100%;
-	}
-
 	.winxp-background {
 		background-image: url("/bg.jpg");
 		background-size: cover;
 		background-position: center;
 		background-attachment: fixed;
 		min-height: 100vh;
+		background-color: #000;
+		color: white;
 	}
 
 	#scroll-container {
@@ -417,6 +387,7 @@
 		line-height: 120%;
 		font-weight: bold;
 		color: white;
+		mix-blend-mode: difference;
 	}
 
 	.body {
@@ -434,13 +405,26 @@
 	}
 
 	.contact-button {
-		padding: 0.375rem;
-		background: silver;
-		box-shadow:
-			inset -1px -1px #0a0a0a,
-			inset 1px 1px #fff,
-			inset -2px -2px grey,
-			inset 2px 2px #dfdfdf;
+		font-family: "Pixelated MS Sans Serif", Arial;
+		-webkit-font-smoothing: antialiased;
+		font-size: 11px;
+		box-sizing: border-box;
+		border: 1px solid #000000;
+		background: linear-gradient(180deg, #3b3b3b, #000000 86%, #4f4f4f);
+		box-shadow: none;
+		border-radius: 3px;
+		min-height: 0;
+		height: 27px;
+		padding: 3px 10px;
+	}
+
+	.contact-button:hover svg {
+		stroke: white;
+	}
+
+	.contact-button svg {
+		height: 100%;
+		stroke: #7b7b7b;
 	}
 
 	#projects {
@@ -455,50 +439,6 @@
 		width: 100%;
 		max-width: 22rem;
 	}
-
-	.project-link {
-		text-decoration: none;
-	}
-
-	.title-bar {
-		cursor: move;
-		background-image: url('/titlebar.jpg') !important;
-		background-size: cover !important;
-		background-position: 80% !important;
-		background-attachment: fixed !important;
-		border-top: 1px solid #000 !important;
-		border-left: 1px solid #000 !important;
-		border-right: 1px solid #000 !important;
-	}
-
-	.title-bar::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Adjust the last value (0.5) to control darkness */
-    z-index: 1;
-	height: 21px;
-  }
-
-  .window {
-    box-shadow: inset -1px -1px #000000, inset 1px 1px #000, inset -2px -2px #000, inset 2px 2px #000, inset -3px -3px #000, inset 3px 3px #000 !important;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 0 0 3px;
-    -webkit-font-smoothing: antialiased;
-}
-
-  .title-bar > * {
-    position: relative;
-    z-index: 2;
-  }
-
-  .title-bar-controls button{
-	filter: saturate(0) brightness(0.7) contrast(2.3) !important;
-  }
 
 	@media (max-width: 830px) {
 		.section.row {
@@ -545,20 +485,14 @@
 	}
 
 	.taskbar-icon.opened {
-		background-color: rgba(255, 255, 255, 0.2);
+		background-color: rgb(0 0 0 / 64%);
 		border: 1px solid rgba(255, 255, 255, 0.3);
+		color: white;
+		backdrop-filter: blur(2px);
 	}
 
 	.taskbar-icon img {
 		width: 20px;
 		height: 20px;
-	}
-
-	.window {
-		transition: transform 0.3s ease-out;
-	}
-
-	.window:active {
-		transition: none;
 	}
 </style>
