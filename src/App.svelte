@@ -1,11 +1,15 @@
 <script>
 	import { onMount } from "svelte";
 	import XPTaskbar from "./XPTaskbar.svelte";
-	import { fade } from "svelte/transition";
+	import { fade, scale } from "svelte/transition";
+	import { quintOut } from "svelte/easing";
 	import { writable } from "svelte/store";
 	import "../public/xp.css";
 	import Device from "svelte-device-info";
 	import XPWindow from "./components/XPWindow.svelte";
+    import Emoji from "./components/Emoji.svelte";
+    import { flip } from 'svelte/animate';
+	
 
 	const projects = [
 		{
@@ -82,6 +86,7 @@
 	}
 
 	let draggedWindow = null;
+	let highestZIndex = 1;
 
 	function toggleWindow(id) {
 		windowStore.update((windows) => {
@@ -99,34 +104,45 @@
 	function startDragging(id, event) {
 		const targetWindow = $windowStore.find((w) => w.id === id);
 		if (targetWindow) {
+			highestZIndex++;
 			draggedWindow = {
 				id,
 				startX: event.clientX,
 				startY: event.clientY,
 				x: 0,
 				y: 0,
+				zIndex: highestZIndex
 			};
+			
+			// Update the window's z-index in the store
+			windowStore.update(windows => 
+				windows.map(w => w.id === id ? {...w, zIndex: highestZIndex} : w)
+			);
 		}
 	}
 
 	function stopDragging() {
-		draggedWindow = null;
+		if (draggedWindow) {
+			// Reset the z-index to a base value when dragging stops
+			windowStore.update(windows => 
+				windows.map(w => w.id === draggedWindow.id ? {...w, zIndex: 1} : w)
+			);
+			draggedWindow = null;
+		}
 	}
 
 	function drag(event) {
 		if (draggedWindow) {
-			const maxDistance = 50;
-			const newX = event.clientX - draggedWindow.startX;
-			const newY = event.clientY - draggedWindow.startY;
+			const easeFactor = 0.1; // Adjust this to change the easing strength
 
-			draggedWindow.x = Math.max(
-				-maxDistance,
-				Math.min(maxDistance, newX),
-			);
-			draggedWindow.y = Math.max(
-				-maxDistance,
-				Math.min(maxDistance, newY),
-			);
+			const rawX = event.clientX - draggedWindow.startX;
+			const rawY = event.clientY - draggedWindow.startY;
+
+			// Apply easing function
+			const easeFunction = (x) => Math.sign(x) * Math.log(1 + Math.abs(x) * easeFactor) / easeFactor;
+
+			draggedWindow.x = easeFunction(rawX);
+			draggedWindow.y = easeFunction(rawY);
 		}
 	}
 
@@ -161,6 +177,8 @@
 		"whatever u do DONT click on grim 🙁 (the skeleton)";
 
 	$: openWindows = $windowStore.filter((w) => w.isOpen);
+
+  let flipDuration = 300;
 </script>
 
 <svelte:head>
@@ -175,7 +193,7 @@
 			<section id="introduction" class="section row">
 				<div id="introduction-top">
 					<div class="paragraph">
-						<div class="title">hi i'm grim</div>
+						<div class="title">hi lol, i'm grim</div>
 						<div class="body">
 							i yap, code cool shit, and push breaking changes to
 							prod on fridays.
@@ -261,23 +279,26 @@
 				<div id="projects">
 					<div id="project-card-area">
 						{#each openWindows as window (window.id)}
-							{#if projects.some((p) => p.id === window.id)}
-								{@const project = projects.find(
-									(p) => p.id === window.id,
-								)}
-								<XPWindow
-									id={window.id}
-									icon={project.icon}
-									title={project.name}
-									description={project.description}
-									buttonText={project.disabled ? "Coming Soon" : project.url}
-									buttonUrl={project.disabled ? null : `https://${project.url}`}
-									disabled={project.disabled}
-									{draggedWindow}
-									{startDragging}
-									{toggleWindow}
-								/>
-							{/if}
+							<div animate:flip={{duration: flipDuration}}>
+								{#if projects.some((p) => p.id === window.id)}
+									{@const project = projects.find(
+										(p) => p.id === window.id,
+									)}
+									<XPWindow
+										id={window.id}
+										icon={project.icon}
+										title={project.name}
+										description={project.description}
+										buttonText={project.disabled ? "Coming Soon" : project.url}
+										buttonUrl={project.disabled ? null : `https://${project.url}`}
+										disabled={project.disabled}
+										{draggedWindow}
+										{startDragging}
+										{toggleWindow}
+										zIndex={window.zIndex}
+									/>
+								{/if}
+							</div>
 						{/each}
 					</div>
 				</div>
@@ -329,6 +350,16 @@
 		min-height: 100vh;
 		background-color: #000;
 		color: white;
+	}
+
+	.winxp-background::before{
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.25);
 	}
 
 	#scroll-container {
