@@ -50,7 +50,19 @@
 			taskbar_icon: "/playground.png",
 			icon: "/playground.png",
 			description: "mess around with our themes without spending a dime",
-			disabled: true,
+			disabled: false,
+			social_links: [
+				{
+					name: "twitter",
+					url: "https://x.com/fuckgrimlabs",
+					icon: "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-black-icon.png",
+				},
+				{
+					name: "repo link",
+					url: "https://github.com/vys69/grim-playground",
+					icon: "https://github.com/favicon.ico",
+				},
+			],
 		},
 	];
 
@@ -193,7 +205,8 @@
 		};
 	});
 
-	const desktopDontClickGrim = "whatever u do DONT click on grim 🙁 (the skeleton)";
+	const desktopDontClickGrim =
+		"whatever u do DONT click on grim 🙁 (the skeleton)";
 
 	$: openWindows = $windowStore.filter((w) => w.isOpen);
 
@@ -317,7 +330,7 @@
 										description={project.description}
 										buttonText={project.disabled
 											? "Coming Soon"
-											: project.url}
+											: project.name}
 										buttonUrl={project.disabled
 											? null
 											: `https://${project.url}`}
